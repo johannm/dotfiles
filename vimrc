@@ -11,9 +11,14 @@ filetype indent plugin on
 syntax on
 
 " Set Colorscheme
-set t_Co=256
-colorscheme molokai
-let g:rehash256 = 1
+set t_Co=16
+set background=dark
+colorscheme solarized
+
+" map the leader to comma
+"let mapleader = "<Space>"
+:map <Space> <leader>
+nnoremap <Leader>w :w<CR>
 
 " Better command-line completion
 set wildmenu
@@ -25,6 +30,9 @@ set showcmd
 " mapping of <C-L> below)
 set hlsearch
 
+" Start searching while typing
+set incsearch
+
 " Use case insensitive search, except when using capital letters
 set ignorecase
 set smartcase
@@ -32,14 +40,23 @@ set smartcase
 " Allow backspacing over autoindent, line breaks and start of insert action
 set backspace=indent,eol,start
 
+" Automatically reload files when changed outside vim
+set autoread
+
 " When opening a new line and no filetype-specific indenting is enabled, keep
 " the same indent as the line you're currently on. Useful for READMEs, etc.
 set autoindent
+
+" Set glyphs to highlight trailing whitespace and tab chars.
+set list lcs=trail:·,tab:»·
 
 " Stop certain movements from always going to the first character of a line.
 " While this behaviour deviates from that of Vi, it does what most users
 " coming from other editors would expect.
 set nostartofline
+
+" Always show at least one line above/below the cursor.
+set scrolloff=1
 
 " Display the cursor position on the last line of the screen or in the status
 " line of a window
@@ -78,8 +95,8 @@ set notimeout ttimeout ttimeoutlen=200
 set pastetoggle=<F11>
 
 " Set indentation (spaces as tabs)
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 
 " Useful mappings
@@ -93,10 +110,109 @@ map Y y$
 nnoremap <C-L> :nohl<CR><C-L
 
 " Powerline stuff
-set rtp+=/usr/lib/python3.4/site-packages/powerline/bindings/vim
+"let g:powerline_loaded = 1 " turn off powerline
+let $PYTHONPATH='/usr/lib/python3.4/site-packages'
 
 " Always display the tabline, even if there is only one tab
-set showtabline=2
+"set showtabline=2
+
+"
+" Buffer stuff
+"
+" This allows buffers to be hidden if you've modified a buffer.
+" This is almost a must if you wish to use buffers in this way.
+set hidden
+
+" To open a new empty buffer
+"nmap <leader>n :enew<cr>
+
+" Move to the next buffer
+nmap <leader>l :bnext<CR>
+
+" Move to the previous buffer
+nmap <leader>h :bprevious<CR>
+
+" Close the current buffer and move to the previous one
+" This replicates the idea of closing a tab
+"nmap <leader>bq :bp <BAR> bd #<CR>
+
+" Show all open buffers and their status
+"nmap <leader>bl :ls<CR>
 
 " Hide the default mode text (e.e. -- INSERT -- below the statusline)
 set noshowmode
+
+" gvim options
+:set guioptions-=m  "remove menu bar
+:set guioptions-=T  "remove toolbar
+:set guioptions-=r  "remove right-hand scroll bar
+:set guioptions-=L  "remove left-hand scroll bar
+set guicursor=a:blinkon0
+
+" load plugins with vim-plug
+call plug#begin('~/.vim/plugged')
+  Plug 'jelera/vim-javascript-syntax'
+  Plug 'easymotion/vim-easymotion'
+  Plug 'scrooloose/syntastic'
+  Plug 'scrooloose/nerdtree'
+  Plug 'chriskempson/base16-vim'
+call plug#end()
+
+"
+" vim-easymotion
+"
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Jump to anywhere you want with minimal keystrokes
+" `s{char}{char}{label}`
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Turn on case insensitive feature
+let g:EasyMotion_smartcase = 1
+
+" JK motions: Line motions
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+
+"
+" vim-javascript
+"
+"set conceallevel=1
+"set concealcursor=nvic
+
+" vim-javascript conceal settings.
+let g:javascript_conceal_function = "λ"
+let g:javascript_conceal_this = "@"
+let g:javascript_conceal_return = "⇚"
+let g:javascript_conceal_null = "ø"
+let g:javascript_conceal_undefined = "¿"
+let g:javascript_conceal_NaN = "ℕ"
+
+"
+" syntastic
+"
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"
+" ag
+"
+let g:ag_prg="/usr/bin/ag --vimgrep"
+let g:ag_working_path_mode="r"
+
+"
+" NerdTree
+"
+map <Leader>t :NERDTreeToggle<CR>
+" properly close buffer in nerd tree
+nnoremap <leader>q :bp<cr>:bd #<cr>
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'

@@ -13,5 +13,6 @@ fi
 
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 
+xset r rate 250
 exec ~/.fehbg &
 exec i3

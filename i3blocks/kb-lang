@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# shell scipt to output input language
+setxkbmap -query | awk '/layout/{print toupper($2)}'
