@@ -13,11 +13,12 @@ syntax on
 " Set Colorscheme
 set t_Co=16
 set background=dark
-colorscheme solarized
 
 " map the leader to comma
 "let mapleader = "<Space>"
 :map <Space> <leader>
+
+" Write file
 nnoremap <Leader>w :w<CR>
 
 " Better command-line completion
@@ -79,7 +80,7 @@ set t_vb=
 
 " Enable use of the mouse for all modes
 " This breaks the default X copy-paste functionality (highlight, middle button)
-" set mouse=a
+set mouse=a
 
 " Set the command window height to 2 lines, to avoid many cases of having to
 " 'press <Enter> to continue'
@@ -107,11 +108,12 @@ map Y y$
 
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " next search
-nnoremap <C-L> :nohl<CR><C-L
+"nnoremap <C-L> :nohl<CR><C-L>
+nnoremap <CR> :nohl<CR><CR>
 
-" Powerline stuff
-"let g:powerline_loaded = 1 " turn off powerline
-let $PYTHONPATH='/usr/lib/python3.4/site-packages'
+" Powerline
+let g:powerline_pycmd="py3"
+"startup
 
 " Always display the tabline, even if there is only one tab
 "set showtabline=2
@@ -143,20 +145,33 @@ nmap <leader>h :bprevious<CR>
 set noshowmode
 
 " gvim options
-:set guioptions-=m  "remove menu bar
-:set guioptions-=T  "remove toolbar
-:set guioptions-=r  "remove right-hand scroll bar
-:set guioptions-=L  "remove left-hand scroll bar
+set guioptions-=m  "remove menu bar
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+set guioptions-=L  "remove left-hand scroll bar
 set guicursor=a:blinkon0
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 13
 
+ " Plug 'jelera/vim-javascript-syntax'
 " load plugins with vim-plug
 call plug#begin('~/.vim/plugged')
-  Plug 'jelera/vim-javascript-syntax'
+  Plug 'pangloss/vim-javascript'
   Plug 'easymotion/vim-easymotion'
   Plug 'scrooloose/syntastic'
   Plug 'scrooloose/nerdtree'
+  Plug 'powerline/powerline'
+  Plug 'greyblake/vim-preview'
   Plug 'chriskempson/base16-vim'
+  Plug 'djoshea/vim-autoread'
 call plug#end()
+
+let base16colorspace=256
+"colorscheme base16-default-dark
+colorscheme base16-tomorrow-night
+
+if has("gui_running")
+  colorscheme base16-default-dark
+endif
 
 "
 " vim-easymotion
@@ -175,20 +190,6 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
 "
-" vim-javascript
-"
-"set conceallevel=1
-"set concealcursor=nvic
-
-" vim-javascript conceal settings.
-let g:javascript_conceal_function = "λ"
-let g:javascript_conceal_this = "@"
-let g:javascript_conceal_return = "⇚"
-let g:javascript_conceal_null = "ø"
-let g:javascript_conceal_undefined = "¿"
-let g:javascript_conceal_NaN = "ℕ"
-
-"
 " syntastic
 "
 set statusline+=%#warningmsg#
@@ -196,7 +197,6 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_check_on_open = 1
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -214,5 +214,8 @@ let g:ag_working_path_mode="r"
 map <Leader>t :NERDTreeToggle<CR>
 " properly close buffer in nerd tree
 nnoremap <leader>q :bp<cr>:bd #<cr>
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
+"let g:NERDTreeDirArrowExpandable = '▸'
+"let g:NERDTreeDirArrowCollapsible = '▾'
+
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1

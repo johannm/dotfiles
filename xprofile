@@ -1,2 +1,1 @@
-xset r rate 220
-xset s noblank && xset s off & xset -dpms
+setxkbmap -option 'caps:ctrl_modifier' && xcape -e 'Caps_Lock=Escape' &
