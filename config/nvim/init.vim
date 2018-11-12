@@ -11,7 +11,7 @@ Plug 'mileszs/ack.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'shumphrey/fugitive-gitlab.vim'
-Plug 'neomake/neomake'
+Plug 'w0rp/ale'
 
 " Language support
 Plug 'fatih/vim-go'                            " Go support
@@ -262,20 +262,10 @@ let g:fugitive_gitlab_domains = ['https://git.greenqloud.com']
 " Plugin: w0rp/ale
 "----------------------------------------------
 " Error and warning signs.
-"let g:ale_sign_error = '⤫'
-"let g:ale_sign_warning = '⚠'
-
-" Enable integration with airline.
-"let g:airline#extensions#ale#enabled = 1
-
-"----------------------------------------------
-" Plugin: neomake/neomake
-"----------------------------------------------
-" Configure signs.
-let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
-let g:neomake_warning_sign = {'text': '∆', 'texthl': 'NeomakeWarningSign'}
-let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
-let g:neomake_info_sign    = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'
+ " Enable integration with airline.
+let g:airline#extensions#ale#enabled = 1
 
 "----------------------------------------------
 " Language: Golang
@@ -308,9 +298,6 @@ au FileType go nmap <Leader>ge <Plug>(go-callees)
 " Run goimports when running gofmt
 let g:go_fmt_command = "goimports"
 
-" Set neosnippet as snippet engine
-" let g:go_snippet_engine = "neosnippet"
-
 " Enable syntax highlighting per default
 let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
@@ -336,47 +323,8 @@ let g:go_list_type = "quickfix"
 " Add the failing test name to the output of :GoTest
 let g:go_test_show_name = 1
 
-" gometalinter configuration
-let g:go_metalinter_command = ""
-let g:go_metalinter_deadline = "5s"
-let g:go_metalinter_enabled = [
-  \ 'deadcode',
-  \ 'gas',
-  \ 'goconst',
-  \ 'gocyclo',
-  \ 'golint',
-  \ 'gosimple',
-  \ 'ineffassign',
-  \ 'vet',
-  \ 'vetshadow'
-\]
-
 " Set whether the JSON tags should be snakecase or camelcase.
 let g:go_addtags_transform = "camelcase"
-
-" neomake configuration for Go.
-let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
-let g:neomake_go_gometalinter_maker = {
-  \ 'args': [
-  \   '--tests',
-  \   '--enable-gc',
-  \   '--concurrency=3',
-  \   '--fast',
-  \   '-D', 'aligncheck',
-  \   '-D', 'dupl',
-  \   '-D', 'gocyclo',
-  \   '-D', 'gotype',
-  \   '-E', 'misspell',
-  \   '-E', 'unused',
-  \   '%:p:h',
-  \ ],
-  \ 'append_file': 0,
-  \ 'errorformat':
-  \   '%E%f:%l:%c:%trror: %m,' .
-  \   '%W%f:%l:%c:%tarning: %m,' .
-  \   '%E%f:%l::%trror: %m,' .
-  \   '%W%f:%l::%tarning: %m'
-  \ }
 
 "----------------------------------------------
 " Language: Bash
