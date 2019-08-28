@@ -1,221 +1,301 @@
-" Set 'nocompatible' to ward off unexpected things that your distro might
-" have made, as well as sanely reset options when re-sourcing .vimrc
-set nocompatible
-
-" Attempt to determine the type of a file based on its name and possibly its
-" contents. Use this to allow intelligent auto-indenting for each filetype,
-" and for plugins that are filetype specific.
-filetype indent plugin on
-
-" Enable syntax highlighting
-syntax on
-
-" Set Colorscheme
-set t_Co=16
-set background=dark
-
-" map the leader to comma
-"let mapleader = "<Space>"
-:map <Space> <leader>
-
-" Write file
-nnoremap <Leader>w :w<CR>
-
-" Better command-line completion
-set wildmenu
-
-" Show partial commands in the last line of the screen
-set showcmd
-
-" Highlight searches (use <C-L> to temporarily turn off highlighting; see the
-" mapping of <C-L> below)
-set hlsearch
-
-" Start searching while typing
-set incsearch
-
-" Use case insensitive search, except when using capital letters
-set ignorecase
-set smartcase
-
-" Allow backspacing over autoindent, line breaks and start of insert action
-set backspace=indent,eol,start
-
-" Automatically reload files when changed outside vim
-set autoread
-
-" When opening a new line and no filetype-specific indenting is enabled, keep
-" the same indent as the line you're currently on. Useful for READMEs, etc.
-set autoindent
-
-" Set glyphs to highlight trailing whitespace and tab chars.
-set list lcs=trail:·,tab:»·
-
-" Stop certain movements from always going to the first character of a line.
-" While this behaviour deviates from that of Vi, it does what most users
-" coming from other editors would expect.
-set nostartofline
-
-" Always show at least one line above/below the cursor.
-set scrolloff=1
-
-" Display the cursor position on the last line of the screen or in the status
-" line of a window
-set ruler
-
-" Always display the status line, even if only one window is displayed
-set laststatus=2
-
-" Instead of failing a command because of unsaved changes, instead raise a
-" dialogue asking if you wish to save changed files.
-set confirm
-
-" Use visual bell instead of beeping when doing something wrong
-set visualbell
-
-" And reset the terminal code for the visual bell. If visualbell is set, and
-" this line is also included, vim will neither flash nor beep. If visualbell
-" is unset, this does nothing.
-set t_vb=
-
-" Enable use of the mouse for all modes
-" This breaks the default X copy-paste functionality (highlight, middle button)
-set mouse=a
-
-" Set the command window height to 2 lines, to avoid many cases of having to
-" 'press <Enter> to continue'
-set cmdheight=1
-
-" Display line numbers on the left
-set number
-
-" Quickly time out on keycodes, but never time out on mappings
-set notimeout ttimeout ttimeoutlen=200
-
-" Use <F11> to toggle between 'paste' and 'nopaste'
-set pastetoggle=<F11>
-
-" Set indentation (spaces as tabs)
-set shiftwidth=2
-set softtabstop=2
-set expandtab
-
-" Useful mappings
-
-" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
-" which is the default
-map Y y$
-
-" Map <C-L> (redraw screen) to also turn off search highlighting until the
-" next search
-"nnoremap <C-L> :nohl<CR><C-L>
-nnoremap <CR> :nohl<CR><CR>
-
-" Powerline
-let g:powerline_pycmd="py3"
-"startup
-
-" Always display the tabline, even if there is only one tab
-"set showtabline=2
-
-"
-" Buffer stuff
-"
-" This allows buffers to be hidden if you've modified a buffer.
-" This is almost a must if you wish to use buffers in this way.
-set hidden
-
-" To open a new empty buffer
-"nmap <leader>n :enew<cr>
-
-" Move to the next buffer
-nmap <leader>l :bnext<CR>
-
-" Move to the previous buffer
-nmap <leader>h :bprevious<CR>
-
-" Close the current buffer and move to the previous one
-" This replicates the idea of closing a tab
-"nmap <leader>bq :bp <BAR> bd #<CR>
-
-" Show all open buffers and their status
-"nmap <leader>bl :ls<CR>
-
-" Hide the default mode text (e.e. -- INSERT -- below the statusline)
-set noshowmode
-
-" gvim options
-set guioptions-=m  "remove menu bar
-set guioptions-=T  "remove toolbar
-set guioptions-=r  "remove right-hand scroll bar
-set guioptions-=L  "remove left-hand scroll bar
-set guicursor=a:blinkon0
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 13
-
- " Plug 'jelera/vim-javascript-syntax'
-" load plugins with vim-plug
 call plug#begin('~/.vim/plugged')
-  Plug 'pangloss/vim-javascript'
-  Plug 'easymotion/vim-easymotion'
-  Plug 'scrooloose/syntastic'
-  Plug 'scrooloose/nerdtree'
-  Plug 'powerline/powerline'
-  Plug 'greyblake/vim-preview'
-  Plug 'chriskempson/base16-vim'
-  Plug 'djoshea/vim-autoread'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'scrooloose/nerdtree'
+
+" Language support
+Plug 'fatih/vim-go'
+
+" Colorschemes
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'chriskempson/base16-vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'lifepillar/vim-solarized8'
+
 call plug#end()
 
-let base16colorspace=256
-"colorscheme base16-default-dark
-colorscheme base16-tomorrow-night
+"----------------------------------------------
+" General settings
+"----------------------------------------------
+set autoindent                    " take indent for new line from previous line
+set smartindent                   " enable smart indentation
+set autoread                      " reload file if the file changes on the disk
+set autowrite                     " write when switching buffers
+set autowriteall                  " write on :quit
+set clipboard=unnamedplus
+set completeopt-=preview          " remove the horrendous preview window
+set cursorline                    " highlight the current line for the cursor
+set encoding=utf-8
+set expandtab                     " expands tabs to spaces
+set list                          " show trailing whitespace
+set listchars=tab:\|\ ,trail:▫
+set nospell                       " disable spelling
+set noswapfile                    " disable swapfile usage
+set nowrap
+set noerrorbells                  " No bells!
+set novisualbell                  " I said, no bells!
+set number                        " show number ruler
+"set relativenumber                " show relative numbers in the ruler
+set ruler
+set formatoptions=tcqronj         " set vims text formatting options
+set softtabstop=2
+set tabstop=2
+set title                         " let vim set the terminal title
+set updatetime=100                " redraw the status bar often
 
-if has("gui_running")
-  colorscheme base16-default-dark
+" neovim specific settings
+if has('nvim')
+    " Set the Python binaries neovim is using. Please note that you will need to
+    " install the neovim package for these binaries separately like this for
+    " example:
+    " pip3.6 install -U neovim
+    let g:python_host_prog = '/usr/bin/python2'
+    let g:python3_host_prog = '/usr/bin/python3'
+
+    " Enable deoplete on startup
+    let g:deoplete#enable_at_startup = 1
 endif
 
-"
-" vim-easymotion
-"
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Enable mouse if possible
+if has('mouse')
+    set mouse=a
+endif
 
-" Jump to anywhere you want with minimal keystrokes
-" `s{char}{char}{label}`
-nmap s <Plug>(easymotion-overwin-f2)
+" Allow vim to set a custom font or color for a word
+syntax enable
 
-" Turn on case insensitive feature
-let g:EasyMotion_smartcase = 1
+" Set the leader button
+let mapleader = ' '
 
-" JK motions: Line motions
-map <Leader>j <Plug>(easymotion-j)
-map <Leader>k <Plug>(easymotion-k)
+" Autosave buffers before leaving them
+autocmd BufLeave * silent! :wa
 
+" Remove trailing white spaces on save
+autocmd BufWritePre * :%s/\s\+$//e
+
+" Center the screen quickly
+nnoremap <space> zz
+
+"----------------------------------------------
+" Colors
+"----------------------------------------------
+set termguicolors
+colorscheme Dracula
+"set background=light
+"colorscheme solarized8
+
+
+" Override the search highlight color with a combination that is easier to
+" read. The default PaperColor is dark green backgroun with black foreground.
 "
-" syntastic
-"
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+" Reference:
+" - http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
+highlight Search guibg=DeepPink4 guifg=White ctermbg=53 ctermfg=White
 
-let g:syntastic_javascript_checkers = ['jshint']
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"----------------------------------------------
+" Searching
+"----------------------------------------------
+set incsearch                     " move to match as you type the search query
+set hlsearch                      " disable search result highlighting
 
-"
-" ag
-"
-let g:ag_prg="/usr/bin/ag --vimgrep"
-let g:ag_working_path_mode="r"
+if has('nvim')
+    set inccommand=split          " enables interactive search and replace
+endif
 
-"
-" NerdTree
-"
-map <Leader>t :NERDTreeToggle<CR>
-" properly close buffer in nerd tree
-nnoremap <leader>q :bp<cr>:bd #<cr>
-"let g:NERDTreeDirArrowExpandable = '▸'
-"let g:NERDTreeDirArrowCollapsible = '▾'
+" Clear search highlights
+map <leader>c :nohlsearch<cr>
+"map <CR> :nohlsearch<cr>
 
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
+" These mappings will make it so that going to the next one in a search will
+" center on the line it's found in.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+"----------------------------------------------
+" Navigation
+"----------------------------------------------
+" Disable arrow keys
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
+" Move between buffers with Shift + arrow key...
+nnoremap <S-Left> :bprevious<cr>
+nnoremap <S-Right> :bnext<cr>
+
+"Better window navigation
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
+" ... but skip the quickfix when navigating
+augroup qf
+    autocmd!
+    autocmd FileType qf set nobuflisted
+augroup END
+
+" Fix some common typos
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
+
+"----------------------------------------------
+" Splits
+"----------------------------------------------
+" Create horizontal splits below the current window
+set splitbelow
+set splitright
+
+" Creating splits
+nnoremap <leader>v :vsplit<cr>
+nnoremap <leader>h :split<cr>
+
+" Closing splits
+nnoremap <leader>q :close<cr>
+
+"----------------------------------------------
+" Plugin: bling/vim-airline
+"----------------------------------------------
+" Show status bar by default.
+set laststatus=2
+
+" Enable top tabline.
+let g:airline#extensions#tabline#enabled = 1
+
+" Disable showing tabs in the tabline. This will ensure that the buffers are
+" what is shown in the tabline at all times.
+let g:airline#extensions#tabline#show_tabs = 0
+
+" Enable powerline fonts.
+let g:airline_powerline_fonts = 0
+
+" Explicitly define some symbols that did not work well for me in Linux.
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.branch = ''
+let g:airline_symbols.maxlinenr = ''
+
+let g:airline_theme='solarized'
+
+"----------------------------------------------
+" Plugin: 'ctrlpvim/ctrlp.vim'
+"----------------------------------------------
+" Note: We are not using CtrlP much in this configuration. But vim-go depend on
+" it to run GoDecls(Dir).
+
+" Disable the CtrlP mapping, since we want to use FZF instead for <c-p>.
+let g:ctrlp_map = ''
+
+"----------------------------------------------
+" Plugin: 'junegunn/fzf.vim'
+"----------------------------------------------
+nnoremap <c-p> :FZF<cr>
+
+"----------------------------------------------
+" Plugin: scrooloose/nerdtree
+"----------------------------------------------
+nnoremap <leader>d :NERDTreeToggle<cr>
+nnoremap <F2> :NERDTreeToggle<cr>
+
+" Files to ignore
+let NERDTreeIgnore = [
+    \ '\~$',
+    \ '\.pyc$',
+    \ '^\.DS_Store$',
+    \ '^node_modules$',
+    \ '^.ropeproject$',
+    \ '^__pycache__$'
+\]
+
+" Close vim if NERDTree is the only opened window.
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" Show hidden files by default.
+let NERDTreeShowHidden = 1
+
+" Allow NERDTree to change session root.
+let g:NERDTreeChDirMode = 2
+
+"----------------------------------------------
+" Language: Golang
+"----------------------------------------------
+au FileType go set noexpandtab
+au FileType go set shiftwidth=4
+au FileType go set softtabstop=4
+au FileType go set tabstop=4
+
+" Mappings
+au FileType go nmap <F8> :GoMetaLinter<cr>
+au FileType go nmap <F9> :GoCoverageToggle -short<cr>
+au FileType go nmap <F10> :GoTest -short<cr>
+au FileType go nmap <F12> <Plug>(go-def)
+au Filetype go nmap <leader>ga <Plug>(go-alternate-edit)
+au Filetype go nmap <leader>gah <Plug>(go-alternate-split)
+au Filetype go nmap <leader>gav <Plug>(go-alternate-vertical)
+au FileType go nmap <leader>gt :GoDeclsDir<cr>
+au FileType go nmap <leader>gc <Plug>(go-coverage-toggle)
+au FileType go nmap <leader>gd <Plug>(go-def)
+au FileType go nmap <leader>gdv <Plug>(go-def-vertical)
+au FileType go nmap <leader>gdh <Plug>(go-def-split)
+au FileType go nmap <leader>gD <Plug>(go-doc)
+au FileType go nmap <leader>gDv <Plug>(go-doc-vertical)
+
+au FileType go nmap <Leader>gr <Plug>(go-referrers)
+au FileType go nmap <Leader>gc <Plug>(go-callers)
+au FileType go nmap <Leader>ge <Plug>(go-callees)
+
+" Run goimports when running gofmt
+let g:go_fmt_command = "goimports"
+
+" Enable syntax highlighting per default
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+
+" Show the progress when running :GoCoverage
+let g:go_echo_command_info = 1
+
+" Show type information
+let g:go_auto_type_info = 1
+
+" Highlight variable uses
+let g:go_auto_sameids = 1
+
+" Fix for location list when vim-go is used together with Syntastic
+let g:go_list_type = "quickfix"
+
+" Add the failing test name to the output of :GoTest
+let g:go_test_show_name = 1
+
+" Set whether the JSON tags should be snakecase or camelcase.
+let g:go_addtags_transform = "camelcase"
+
+" Use gopls for GoDef and GoInfo
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+"----------------------------------------------
+" Language: Bash
+"----------------------------------------------
+au FileType sh set noexpandtab
+au FileType sh set shiftwidth=2
+au FileType sh set softtabstop=2
+au FileType sh set tabstop=2
